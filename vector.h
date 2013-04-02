@@ -1,3 +1,7 @@
+#ifndef _MYVECTOR
+
+#define _MYVECTOR
+
 #include <cstdlib>
 #include <cstring>
 
@@ -14,11 +18,12 @@ namespace myvector {
 			vector(vector const &);
 			~vector();
 
-			size_t size() { return _size; }
-			size_t memory() { return _memory; }
+			size_t size() const { return _size; }
+			size_t memory() const { return _memory; }
 
 			vector operator = (vector const &);
 			T & operator [] (size_t i);
+			T operator () (size_t i) const;
 			void resize(size_t n);
 	};
 
@@ -75,6 +80,12 @@ namespace myvector {
 	}
 
 	template <typename T>
+	T vector<T>::operator () (size_t i) const
+	{
+		if (i < _size) return _begin[i];
+	}
+
+	template <typename T>
 	void vector<T>::resize(size_t n)
 	{
 		_begin = (T *) realloc(_begin, sizeof(T) * n);
@@ -82,3 +93,5 @@ namespace myvector {
 		if (_size > n) _size = n;
 	}
 }
+
+#endif

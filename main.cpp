@@ -5,7 +5,7 @@ using namespace myvector;
 
 int main ()
 {
-//	while (1) {
+	while (1) {
 		vector<int> a;
 //		vector<int> a(80);
 
@@ -30,7 +30,7 @@ int main ()
 
 		a.resize(129);
 		cout << a.size() << ' ' << a.memory() << endl;
-//	}
+	}
 
 	return 0;
 }
