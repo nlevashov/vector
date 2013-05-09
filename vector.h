@@ -4,6 +4,11 @@
 
 #include <cstdlib>
 #include <cstring>
+#include <iostream>
+using namespace std;
+
+//const & in =
+//небазовые типы
 
 namespace myvector {
 	template <typename T = double>
@@ -15,13 +20,15 @@ namespace myvector {
 		public:
 			vector();
 			vector(size_t);
-			vector(vector const &);
+			vector(const vector &);
+			template <typename U> vector(const vector<U> &);
 			~vector();
 
 			size_t size() const { return _size; }
 			size_t memory() const { return _memory; }
 
-			vector operator = (vector const &);
+			vector operator = (const vector &);
+			template <typename U> vector operator = (const vector<U> &);
 			T & operator [] (size_t i);
 			T operator () (size_t i) const;
 			void resize(size_t n);
@@ -34,35 +41,56 @@ namespace myvector {
 	}
 
 	template <typename T>
-	vector<T>::vector(size_t n) : _memory(n), _size(n)
+	vector<T>::vector(size_t n) : _memory(n), _size(0)
 	{
 		_begin = new T[n];
-		_memory = n;
-		_size = n;
 	}
 
 	template <typename T>
-	vector<T>::vector(vector const & v)
+	vector<T>::vector(const vector & v)
 	{
-		_begin = new T[v._memory];
-		memcpy(_begin, v._begin, sizeof(T) * v._memory);
-		_memory = v._memory;
-		_size = v._size;
+		_begin = new T[v.memory()];
+		_memory = v.memory();
+		_size = v.size();
+		for (size_t i = 0; i < _size; i++) _begin[i] = v(i);
+	}
+
+	template <typename T>
+	template <typename U>
+	vector<T>::vector(const vector<U> & v)
+	{
+		_begin = new T[v.memory()];
+		_memory = v.memory();
+		_size = v.size();
+		for (size_t i = 0; i < _size; i++) _begin[i] = v(i);
 	}
 
 	template <typename T>
 	vector<T>::~vector()
 	{
-		delete _begin;
+		if (_begin) delete [] _begin;
 	}
 
 	template <typename T>
-	vector<T> vector<T>::operator = (vector<T> const & v)
+	vector<T> vector<T>::operator = (const vector & v)
 	{
-		_begin = (T *) realloc(_begin, sizeof(T) * v._memory);
-		memcpy(_begin, v._begin, sizeof(T) * v._memory);
-		_memory = v._memory;
-		_size = v._size;
+		if (_begin) delete [] _begin;
+		_begin = new T[v.memory()];
+		_memory = v.memory();
+		_size = v.size();
+		for (size_t i = 0; i < _size; i++) _begin[i] = v(i);
+		return *this;
+	}
+
+	template <typename T>
+	template <typename U>
+	vector<T> vector<T>::operator = (const vector<U> & v)
+	{
+		if (_begin) delete [] _begin;
+		_begin = new T[v.memory()];
+		_memory = v.memory();
+		_size = v.size();
+		for (size_t i = 0; i < _size; i++) _begin[i] = v(i);
 		return *this;
 	}
 

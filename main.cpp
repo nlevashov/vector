@@ -6,14 +6,16 @@ using namespace myvector;
 int main ()
 {
 	while (1) {
-		vector<int> a;
-//		vector<int> a(80);
+//		vector<int> a;
+		vector<int> a(80);
 
-		vector<int> b = a;
-//		vector<double> c = a;
+		vector<int> b = a;		//почему общий конструктор не вызывается?
+		vector<double> c = a;
 
 		vector<int> d(8); d = a;
-//		vector<float> e(25); e = a;
+		vector<float> e(25); e = a;
+
+		vector<double> h; h = a = e;
 
 		cout << a.size() << ' ' << a.memory() << endl;
 
@@ -23,7 +25,7 @@ int main ()
 		cout << endl;
 
 		vector<int> f(7); f = a;
-//		vector<float> g(9); g = a;
+		vector<float> g(9); g = a;
 
 		a.resize(80);
 		cout << a.size() << ' ' << a.memory() << endl;
